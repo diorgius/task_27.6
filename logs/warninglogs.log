@@ -24,3 +24,5 @@
 [2026-03-21T19:21:50.026699+00:00] logger.WARNING: WARNING MESSAGE. VK ID registration: CSRF токен не валидный [] []
 [2026-03-21T20:06:26.969690+00:00] logger.WARNING: WARNING MESSAGE. Login: CSRF токен не валидный [] []
 [2026-03-21T20:58:37.940133+00:00] logger.WARNING: WARNING MESSAGE. VK ID registration: CSRF токен не валидный [] []
+[2026-03-23T17:59:12.914417+00:00] logger.WARNING: WARNING MESSAGE. Login: CSRF токен не валидный [] []
+[2026-03-23T17:59:15.942389+00:00] logger.WARNING: WARNING MESSAGE. Login: CSRF токен не валидный [] []

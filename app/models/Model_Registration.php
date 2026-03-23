@@ -18,15 +18,31 @@ class Model_Registration extends Model
 
         $user = DB::getByProp('users', 'vkid', $vkid);
 
-        if($user) return false;
+        if ($user)
+            return false; // если пользователь с таким vkid уже есть, то предлагаем ему авторизоваться 
 
-        $credentials = [
-            'vkid' => $vkid,
-            'login' => substr($email, 0, strpos($email, '@')),
-            'email' => $email,
-            'role' => 'uservk'
-        ];
-        $user = DB::create('users', $credentials);
+        // если пользователя нет, то проверяем введенный email, вдруг пользователь уже регистрировался через форму,
+        // если email есть, то обновляем учетную запись пользователя vkid и меняем роль
+        $user = DB::getByProp('users', 'email', $email);
+
+        if ($user) {
+            $credentials = [
+                'id' => $user['id'],
+                'vkid' => $vkid,
+                'role' => 'uservk'
+            ];
+            $user = DB::update('users', $credentials);
+            // если нет, то создаем пользователя
+        } else {
+            $credentials = [
+                'vkid' => $vkid,
+                'login' => substr($email, 0, strpos($email, '@')),
+                'email' => $email,
+                'role' => 'uservk'
+            ];
+            $user = DB::create('users', $credentials);
+        }
+        // получаем данные пользователя, для авторизации
         $user = DB::getByProp('users', 'id', $user);
         return $user;
     }
@@ -41,7 +57,7 @@ class Model_Registration extends Model
         // $role = htmlspecialchars(trim($credentials['role']));
         $role = 'user';
 
-        // проверки надо будет сделать на JS (без перезагрузки страницы и не грузить сервер лишними запросами)
+        // проверки надо делать на JS (без перезагрузки страницы и не грузить сервер лишними запросами)
         // и тогда можно будет использовать один метод для регистрации через форму и через VK ID 
 
         $result = [];
@@ -66,6 +82,13 @@ class Model_Registration extends Model
 
         if ($user) {
             $result[] = "Такой пользователь уже существует";
+        }
+
+        // проверяем по email, если пользователь регистрировался через vkid
+        $user = DB::getByProp('users', 'email', $email);
+
+        if ($user) {
+            $result[] = "Пользователь с таким email уже существует";
         }
 
         if (count($result) == 0) {

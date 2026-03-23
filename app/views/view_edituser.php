@@ -1,12 +1,13 @@
 <?php if(!empty($data)): ?>
-
 <h2>Пользователь: <?= $data['login']?></h2>
 <div class="div-edituser-form">
     <form class="form-edituser" action="/admin/updateuser" method="post">
         <label for="id">ID</label>
         <input type="text" id="id" name="id" value="<?= $data['id'] ?>" readonly>
-        <label for="username">Логин</label>
-        <input type="text" id="username" name="login" value="<?= $data['login'] ?>">
+        <label for="vkid">VK ID</label>
+        <input type="text" id="vkid" name="vkid" value="<?= $data['vkid'] ?>">
+        <label for="login">Логин</label>
+        <input type="text" id="login" name="login" value="<?= $data['login'] ?>">
         <label for="password">Пароль</label>
         <input type="text" id="password" name="password" value="<?= $data['password'] ?>">
         <label for="email">Email</label>

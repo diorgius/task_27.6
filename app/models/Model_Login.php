@@ -10,15 +10,30 @@ class Model_Login extends Model
     public function loginvk(array $credentials)
     {
         DB::dbconnect();
-        // $vkid = htmlspecialchars(trim($credentials[0])); // это если передавать данные через адресную строку
         $vkid = htmlspecialchars(trim($credentials['vkid']));
+        $email = htmlspecialchars(trim($credentials['email']));
 
+        // проверяем пользователя
         $user = DB::getByProp('users', 'vkid', $vkid);
 
         if ($user) {
             return $user;
         } else {
-            return false;
+            // если пользователя с vkid нет, то проверяем email, если пользователь регистрировлся через форму
+            // и если email есть, то обновляем учетную запись пользователя vkid и меняем роль
+            $user = DB::getByProp('users', 'email', $email);
+            if ($user) {
+                $credentials = [
+                    'id' => $user['id'],
+                    'vkid' => $vkid,
+                    'role' => 'uservk'
+                ];
+                $user = DB::update('users', $credentials);
+                $user = DB::getByProp('users', 'vkid', $vkid);
+                return $user;
+            } else {
+                return false;
+            }
         }
     }
 

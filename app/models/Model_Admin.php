@@ -26,7 +26,8 @@ class Model_Admin extends Model
         $email = htmlspecialchars(trim($data['email']));
         $role = htmlspecialchars(trim($data['role']));
 
-        // надо делать проверки на соответствие введенных данных как при регистрации 
+        // надо делать проверки на соответствие введенных данных как при регистрации
+        // в том числе проверку по email если пользователь регистрировался через VK
 
         $credentials = [
             'login' => $login,
@@ -61,11 +62,21 @@ class Model_Admin extends Model
     {
         $id = $data['id'];
         $login = htmlspecialchars(trim($data['login']));
-        $password = password_hash(htmlspecialchars(trim($data['password'])), PASSWORD_DEFAULT);
+        $password = htmlspecialchars(trim($data['password']));
         $email = htmlspecialchars(trim($data['email']));
         $role = htmlspecialchars(trim($data['role']));
 
         // надо делать проверки на соответствие введенных данных как при регистрации 
+
+        // проверяем, если пароль не менялся, то оставляем старый
+        DB::dbconnect();
+        $user = DB::getByProp('users', 'password', $password);
+
+        if ($password === $user['password']) {
+            $password = $user['password'];
+        } else {
+            $password = password_hash($password, PASSWORD_DEFAULT);
+        }
 
         $credentials = [
             'id' => $id,
@@ -75,7 +86,6 @@ class Model_Admin extends Model
             'role' => $role
         ];
 
-        DB::dbconnect();
         $user = DB::update('users', $credentials);
 
         if ($user) {

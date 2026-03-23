@@ -1,8 +1,10 @@
 <h2>Новый пользователь</h2>
 <div class="div-edituser-form">
     <form class="form-edituser" action="/admin/createuser" method="post">
-        <label for="username">Логин</label>
-        <input type="text" id="username" name="login" required>
+        <label for="vkid">VK ID</label>
+        <input type="text" id="vkid" name="vkid">
+        <label for="login">Логин</label>
+        <input type="text" id="login" name="login" required>
         <label for="password">Пароль</label>
         <input type="text" id="password" name="password" required>
         <label for="email">Email</label>
